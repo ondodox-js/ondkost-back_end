@@ -21,11 +21,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody User user){
-        return userService.createUser(user);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<CustomResponse> login(@RequestBody User user){
-        return  userService.login(user);
+        return userService.registerUser(user);
     }
 }

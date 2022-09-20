@@ -2,6 +2,7 @@ package com.ondodox.kosan.type_room;
 
 import com.ondodox.kosan.picture_room.PictureRoom;
 import com.ondodox.kosan.picture_room.PictureRoomRepository;
+import com.ondodox.kosan.room.Room;
 import com.ondodox.kosan.type_room.dto.TypeRoomCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class TypeRoomService {
     }
 
     TypeRoom findOne(Long id){
-        return typeRoomRepository.findById(id).orElseThrow();
+        return typeRoomRepository.findById(id).orElseThrow(() -> new RuntimeException("Typeroom not found!"));
     }
 
     public TypeRoom save(TypeRoom typeRoom) {

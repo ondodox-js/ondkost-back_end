@@ -15,6 +15,4 @@ public interface TypeRoomRepository extends JpaRepository<TypeRoom, Long> {
             nativeQuery = true
     )
     List<Long> findAllId();
-
-
 }

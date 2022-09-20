@@ -1,14 +1,13 @@
 package com.ondodox.kosan.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 @Entity(name = "users")
 public class User {
     @Id
@@ -22,6 +21,9 @@ public class User {
     private String username;
 
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User(String name) {
         this.name = name;

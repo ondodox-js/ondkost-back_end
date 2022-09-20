@@ -1,6 +1,6 @@
 package com.ondodox.kosan.room;
 
-import com.ondodox.kosan.renter.RenterService;
+import com.ondodox.kosan.type_room.TypeRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class RoomService {
         return roomRepository.countByTypeRoom_IdAndStatusFalse(typeId);
     }
     public Room findOne(Long roomId){
-        return roomRepository.findById(roomId).orElseThrow();
+        return roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found!"));
     }
 
     public List<Room> findAllByTypeRoomId(Long typeId) {
@@ -41,7 +41,7 @@ public class RoomService {
     public Room deleteById(Long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);
         room.ifPresent(value -> roomRepository.delete(value));
-        return room.orElseThrow();
+        return room.orElseThrow(() -> new RuntimeException("Room not found!"));
     }
 
     public Integer count(Long typeId) {
@@ -58,5 +58,11 @@ public class RoomService {
 
     public List<Room> findAll() {
         return (List<Room>) roomRepository.findAll();
+    }
+
+
+    public TypeRoom findTypeRoomByRoom(Room room) {
+
+        return null;
     }
 }

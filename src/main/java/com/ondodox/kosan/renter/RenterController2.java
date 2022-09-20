@@ -1,14 +1,12 @@
 package com.ondodox.kosan.renter;
 
+import com.ondodox.kosan.payment.Payment;
 import com.ondodox.kosan.renter.dto.DescRenterData;
 import com.ondodox.kosan.room.Room;
 import com.ondodox.kosan.room.RoomService;
 import com.ondodox.kosan.type_room.TypeRoom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +40,16 @@ public class RenterController2 {
     @GetMapping("{renterId}/desc")
     public DescRenterData descRenterData(@PathVariable Long renterId){
         return renterService.descRenter(renter(renterId));
+    }
+
+    @PostMapping("{renterId}/extension")
+    public Payment renterExtension(@PathVariable Long renterId, @RequestBody Renter renter){
+        return renterService.extension(renterId, renter.getPeriod());
+    }
+
+    @DeleteMapping("{renterId}/finished")
+    public Renter finishedRenter(@PathVariable Long renterId){
+        return renterService.finished(renterId);
     }
 
 }
