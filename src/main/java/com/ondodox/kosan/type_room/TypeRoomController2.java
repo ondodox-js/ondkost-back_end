@@ -1,17 +1,21 @@
 package com.ondodox.kosan.type_room;
 
+import com.ondodox.kosan.helper.ErrorResponse;
+import com.ondodox.kosan.helper.SuccessResponse;
 import com.ondodox.kosan.renter.Renter;
 import com.ondodox.kosan.renter.RenterService;
 import com.ondodox.kosan.room.Room;
 import com.ondodox.kosan.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+//@RestController
 @RequestMapping("v2/type-room")
 public class TypeRoomController2 {
     private final TypeRoomService typeRoomService;
@@ -28,6 +32,21 @@ public class TypeRoomController2 {
     @GetMapping
     public List<TypeRoom> typeRooms(){
         return (List<TypeRoom>) typeRoomService.findAll();
+    }
+
+    @GetMapping("/new")
+    public ResponseEntity<?> responseEntity(){
+        return new SuccessResponse(typeRoomService.findAll(), HttpStatus.FOUND).sendResponse();
+    }
+
+    @GetMapping("/new/{typeId}")
+    public ResponseEntity<?> responseEntity(@PathVariable Long typeId){
+        try {
+            TypeRoom data = typeRoomService.findOne(typeId);
+            return new SuccessResponse(data, HttpStatus.FOUND).sendResponse();
+        }catch (Exception exception){
+            return new ErrorResponse(exception,HttpStatus.NOT_FOUND).sendResponse();
+        }
     }
 
     @GetMapping("id")

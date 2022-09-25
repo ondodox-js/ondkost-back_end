@@ -7,6 +7,7 @@ import com.ondodox.kosan.type_room.dto.TypeRoomCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,5 +60,11 @@ public class TypeRoomService {
         });
 
         return data;
+    }
+
+    public TypeRoom deleteOne(Long typeId) {
+        TypeRoom typeRoom = findOne(typeId);
+        typeRoomRepository.delete(typeRoom);
+        return typeRoom;
     }
 }

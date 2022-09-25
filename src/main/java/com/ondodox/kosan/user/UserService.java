@@ -56,29 +56,29 @@ public class UserService implements UserDetailsService {
     public Optional<User> findByUsernameOptional(String username){
         return userRepository.findByUsername(username);
     }
-    public ResponseEntity<CustomResponse> login(User user) {
-        CustomResponse customResponse = new CustomResponse();
-
-        try {
-            Optional<User> data = userRepository.findByUsername(user.getUsername());
-            if (data.isPresent()){
-                User data1 = data.get();
-                if (data1.getPassword().equals(user.getPassword())){
-                    customResponse.setData(data);
-                    customResponse.setMessage("Login success!");
-                    return new ResponseEntity<>(customResponse, HttpStatus.OK);
-                }
-            }else {
-                customResponse.setData(data);
-                customResponse.setMessage("Account not found!");
-                return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-            }
-        }catch (Exception e){
-            customResponse.setMessage(e.getMessage());
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        }
-        return null;
-    }
+//    public ResponseEntity<CustomResponse> login(User user) {
+//        CustomResponse customResponse = new CustomResponse();
+//
+//        try {
+//            Optional<User> data = userRepository.findByUsername(user.getUsername());
+//            if (data.isPresent()){
+//                User data1 = data.get();
+//                if (data1.getPassword().equals(user.getPassword())){
+//                    customResponse.setData(data);
+//                    customResponse.setMessage("Login success!");
+//                    return new ResponseEntity<>(customResponse, HttpStatus.OK);
+//                }
+//            }else {
+//                customResponse.setData(data);
+//                customResponse.setMessage("Account not found!");
+//                return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+//            }
+//        }catch (Exception e){
+//            customResponse.setMessage(e.getMessage());
+//            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+//        }
+//        return null;
+//    }
     public List<User> getAll() {
         return userRepository.findAll();
     }

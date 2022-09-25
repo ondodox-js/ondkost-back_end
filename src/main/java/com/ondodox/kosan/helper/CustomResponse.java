@@ -1,9 +1,11 @@
 package com.ondodox.kosan.helper;
 
-import lombok.Data;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@Data
-public class CustomResponse {
-    String message;
-    Object data;
+public class CustomResponse extends ResponseEntity<Object> {
+
+    public CustomResponse(SuccessResponse response, HttpStatus status){
+        super(response, status);
+    }
 }
