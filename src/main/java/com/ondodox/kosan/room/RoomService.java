@@ -60,9 +60,8 @@ public class RoomService {
         return (List<Room>) roomRepository.findAll();
     }
 
-
-    public TypeRoom findTypeRoomByRoom(Room room) {
-
-        return null;
+    public List<Room> findByTypeRoomId(Long typeId){
+        return roomRepository.findByTypeRoomId(typeId).orElseThrow(() -> new RuntimeException("type room not found!."));
     }
+
 }

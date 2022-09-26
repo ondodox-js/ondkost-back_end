@@ -2,13 +2,15 @@ package com.ondodox.kosan.type_room;
 
 import com.ondodox.kosan.helper.ErrorResponse;
 import com.ondodox.kosan.helper.SuccessResponse;
+import com.ondodox.kosan.room.Room;
+import com.ondodox.kosan.room.RoomService;
+import com.ondodox.kosan.room.dto.RoomDTO;
 import com.ondodox.kosan.type_room.dto.TypeRoomDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +19,12 @@ import javax.validation.Valid;
 @RestController @RequestMapping("v3/type-room")
 public class TypeRoomController3 {
     private final TypeRoomService typeRoomService;
+    private final RoomService roomService;
 
     @Autowired
-    public TypeRoomController3(TypeRoomService typeRoomService) {
+    public TypeRoomController3(TypeRoomService typeRoomService, RoomService roomService) {
         this.typeRoomService = typeRoomService;
+        this.roomService = roomService;
     }
 
     @GetMapping
@@ -83,4 +87,57 @@ public class TypeRoomController3 {
         }
     }
 
+
+    @GetMapping("{typeId}/room")
+    public ResponseEntity<?> findByType(@PathVariable Long typeId){
+        try{
+            TypeRoom typeRoom = typeRoomService.findOne(typeId);
+            return new SuccessResponse(roomService.findByTypeRoomId(typeRoom.getId()), HttpStatus.FOUND).sendResponse();
+        }catch (Exception e){
+            return new ErrorResponse(e, HttpStatus.NOT_FOUND).sendResponse();
+        }
+    }
+    @PostMapping("{typeId}/room")
+    public ResponseEntity<?> createOne(@PathVariable Long typeId,@Valid @RequestBody RoomDTO roomDTO, Errors errors){
+        try {
+            if (errors.hasErrors()){
+                throw new Exception();
+            }
+
+            ModelMapper mapper = new ModelMapper();
+            Room room = mapper.map(roomDTO, Room.class);
+            room.setTypeRoom(typeRoomService.findOne(typeId));
+            return new SuccessResponse(roomService.save(room), HttpStatus.FOUND).sendResponse();
+        }catch (Exception e){
+            ErrorResponse response = new ErrorResponse(e, HttpStatus.BAD_REQUEST);
+            for (ObjectError error : errors.getAllErrors()){
+                response.getError().add(error.getDefaultMessage());
+            }
+
+            return response.sendResponse();
+        }
+    }
+
+    @PutMapping("{typeId}/room/{roomId}")
+    public ResponseEntity<?> updateOne(@PathVariable Long typeId, @PathVariable Long roomId, @Valid @RequestBody RoomDTO roomDTO, Errors errors){
+        try{
+            if (errors.hasErrors()){
+                throw new Exception();
+            }
+
+            ModelMapper mapper = new ModelMapper();
+            Room room = mapper.map(roomDTO, Room.class);
+            room.setId(roomId);
+            room.setTypeRoom(typeRoomService.findOne(typeId));
+
+            return new SuccessResponse(roomService.save(room), HttpStatus.OK).sendResponse();
+        }catch (Exception e){
+            ErrorResponse response = new ErrorResponse(e, HttpStatus.BAD_REQUEST);
+            for (ObjectError error : errors.getAllErrors()){
+                response.getError().add(error.getDefaultMessage());
+            }
+
+            return response.sendResponse();
+        }
+    }
 }
